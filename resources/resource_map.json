@@ -1,0 +1,44 @@
+{
+	"friendlyVersion": "1.4",
+	"versionDefName": "APP_RESOURCES",
+	"media": [
+
+		{
+		"type": "png",
+		"defName": "IMAGE_MENU_ICON",
+		"file": "images/menu_icon_lgs_watch.png"
+		},
+
+		{
+		"type": "png",
+		"defName": "IMAGE_BACKGROUND",
+		"file": "images/background.png"
+		},
+
+		{
+		"type": "png",
+		"defName": "IMAGE_LINE",
+		"file": "images/black_line.png"
+		},
+
+		{
+		"type": "font",
+		"defName": "FONT_CHICAGO_20",
+		"file": "fonts/CHICAGO.ttf"
+		},
+
+		{
+		"type": "font",
+		"defName": "FONT_CHICAGO_12",
+		"file": "fonts/CHICAGO.ttf"
+		},
+
+		{
+		"type": "font",
+		"characterRegex": "[:0-9]",
+		"defName": "FONT_CHICAGO_SUBSET_40",
+		"file": "fonts/CHICAGO.ttf"
+		}
+
+	]
+}
