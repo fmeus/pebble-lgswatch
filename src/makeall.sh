@@ -1,7 +1,7 @@
 #!/bin/bash
 
 VER=1.4
-REL=../releases/
+REL=./releases/
 
 function std_version {
 	echo "#define LANGUAGE_$1" > src/lgs_config.h
