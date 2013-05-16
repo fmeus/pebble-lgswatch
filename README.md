@@ -26,3 +26,21 @@ The font used is Chicago, it is freely available for download [here](http://ttfo
 
 [img]: https://dl.dropbox.com/u/265253/scriptogram/lgs_watchface.jpg
 [img_doty]: https://dl.dropbox.com/u/265253/scriptogram/lgs_watchface_doty.jpg
+
+## Build Instructions
+
+Clone this repository in an appropriate directory:
+
+	git clone https://github.com/fmeus/pebble-lgswatch.git
+
+Set up waf:
+
+	python ~/pebble-dev/pebble-sdk-release-001/tools/create_pebble_project.py --symlink-only ~/pebble-dev/pebble-sdk-release-001/sdk/ pebble-lgswatch
+	cd pebble-lgswatch
+
+Configure and build:
+
+	./waf configure
+	src/makeall.sh
+
+Compiled version can be found in the folder `releases`
