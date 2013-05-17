@@ -1,6 +1,9 @@
 #!/bin/bash
 
-VER=1.4
+# Project     : LGS Watch watchface
+# Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
+
+VER=1.5
 REL=./releases/
 
 function std_version {
@@ -46,7 +49,7 @@ function build {
 	wxdx_version $1 $VER
 }
 
-languages=(EN NL FR DE HR ES IT)
+languages=(EN NL FR DE HR ES IT NO)
 for ln in "${languages[@]}"
 do
 	build $ln
