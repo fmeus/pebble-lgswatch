@@ -1,3 +1,8 @@
+v1.5 (May ?)
+
+* Added support for Norwegian
+* Cleanup of internal code
+
 v1.4 (May 5)
 
 * Added support for Italian
