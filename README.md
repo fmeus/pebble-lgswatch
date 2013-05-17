@@ -11,7 +11,7 @@ The alternative version of the watch face displays Year and Day of the year (i.e
 |-------|------|
 | ![Week][img] | ![Day of the Year][img_doty] |
 
-Available in 7 langauges;
+Available in 8 langauges;
 
 - English
 - Spanish
@@ -20,6 +20,7 @@ Available in 7 langauges;
 - French
 - Croation
 - Italian
+- Norwegian
 
 Compiled version of this watchface can be downloaded [here](http://scriptogr.am/fmeus/pebble-lgs-watchface)  
 The font used is Chicago, it is freely available for download [here](http://ttfonts.net/font/5767_Chicago.htm)
