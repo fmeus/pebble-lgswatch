@@ -1,2 +1,2 @@
-#define LANGUAGE_IT
+#define LANGUAGE_NO
 #define FORMAT_WXDX
