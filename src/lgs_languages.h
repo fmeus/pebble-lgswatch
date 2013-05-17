@@ -1,9 +1,6 @@
 /*
   Project     : LGS Watch watchface
   Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
-  Revision    : $Id: lgs_languages.h 1077 2013-05-06 08:28:02Z fmeus_lgs $
-
-  Data collected from http://www.tuxx.nl/maandnamen/talen/
 */
 
 // This works around the inability to use the current GRect macro for constants. (Taken from drop_zone.c)
@@ -35,16 +32,6 @@
 	#define MY_UUID { 0x52, 0xD5, 0x92, 0x34, 0xA5, 0x4B, 0x4D, 0xA1, 0xB0, 0x48, 0x5C, 0x5E, 0xC1, 0x21, 0xF5, 0x4D }
 #endif
 
-// Additional pre-generated UUIDs (one for each language version)
-// #define MY_UUID { 0x29, 0x15, 0xA3, 0x4A, 0xC0, 0xEC, 0x4D, 0xCA, 0xBE, 0x00, 0x3B, 0x27, 0x38, 0x18, 0x88, 0x9D }
-// #define MY_UUID { 0x3C, 0x95, 0x78, 0x22, 0xEF, 0x01, 0x4E, 0x07, 0x88, 0x67, 0x11, 0x24, 0x53, 0xB1, 0x23, 0xC0 }
-// #define MY_UUID { 0xB9, 0xC6, 0x10, 0x2C, 0xBE, 0x06, 0x47, 0xB4, 0xA9, 0x43, 0x9E, 0x3F, 0x54, 0x1B, 0x0A, 0x2E }
-// #define MY_UUID { 0xBE, 0x95, 0xD3, 0x81, 0xC4, 0xA1, 0x4B, 0x89, 0xB4, 0x15, 0x2F, 0x14, 0xB5, 0xFF, 0xC9, 0x7B }
-// #define MY_UUID { 0x5F, 0x88, 0xC1, 0xA6, 0x5F, 0x85, 0x4F, 0x5F, 0xB9, 0x19, 0x11, 0xDB, 0x73, 0x98, 0xD3, 0x12 }
-// #define MY_UUID { 0x0A, 0x1B, 0x84, 0x52, 0xFD, 0x8C, 0x4D, 0x72, 0xA5, 0x97, 0x25, 0x0D, 0xD8, 0x49, 0xC8, 0xCF }
-// #define MY_UUID { 0x1C, 0xAC, 0x7A, 0x9B, 0x53, 0x2A, 0x42, 0xF7, 0x96, 0x86, 0xE1, 0xAF, 0x78, 0xAA, 0x0E, 0xAD }
-// #define MY_UUID { 0xD7, 0xF7, 0xA0, 0x6E, 0x7F, 0x1A, 0x48, 0x6D, 0x9F, 0x23, 0x8A, 0x84, 0x13, 0x97, 0xCC, 0x78 }
-// #define MY_UUID { 0xDC, 0xAD, 0xC1, 0x01, 0x3E, 0x83, 0x42, 0x6B, 0x9B, 0xD3, 0x2F, 0x82, 0xE7, 0x41, 0x49, 0x33 }
 
 // English
 #ifdef LANGUAGE_EN
@@ -57,9 +44,6 @@
 	#endif
 	static char format_date[] = "%b ";
 	static char date_text[] = "Feb 23rd";
-
-	// Month names
-	// static const char *month_names[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
 	// Day names
 	static const GRect day_rect[] = { ConstantGRect(   4, 76, 20, 13 )
@@ -295,7 +279,7 @@
 			                        , ConstantGRect( 107, 76, 15, 13 )
 			                        , ConstantGRect( 125, 76, 16, 13 ) };
 	static const GTextAlignment day_align[] = { GTextAlignmentLeft
-		 									  , GTextAlignmentCenter
+		 									  , GTextAlignmentRight
 		 									  , GTextAlignmentLeft
 		 									  , GTextAlignmentLeft
 		 									  , GTextAlignmentLeft
@@ -303,4 +287,39 @@
 		 									  , GTextAlignmentLeft };
 	static const char *day_line = "Lu Ma Me Gi Ve Sa Do";
 	static const char *day_names[] = { "Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do" };
+#endif
+
+
+// Norwegian
+#ifdef LANGUAGE_NO
+	#define LGS_APP_NAME "LGS Watch NO"
+
+	// Define date formats
+	#ifdef FORMAT_WEEK
+		static char format_week[] = "%V uke";
+		static char week_text[] = "00 uke";
+	#endif
+	static char format_date[] = "%e. ";
+	static char date_text[] = "23. feb";
+
+	// Month names
+	static const char *month_names[] = { "jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des" };
+
+	// Day names
+	static const GRect day_rect[] = { ConstantGRect(   8, 76, 20, 13 )
+			                        , ConstantGRect(  30, 76, 14, 13 )
+			                        , ConstantGRect(  46, 76, 16, 13 )
+			                        , ConstantGRect(  64, 76, 17, 13 )
+			                        , ConstantGRect(  84, 76, 14, 13 ) 
+			                        , ConstantGRect( 101, 76, 15, 13 )
+			                        , ConstantGRect( 120, 76, 15, 13 ) };
+	static const GTextAlignment day_align[] = { GTextAlignmentLeft
+		 									  , GTextAlignmentLeft
+		 									  , GTextAlignmentLeft
+		 									  , GTextAlignmentCenter
+		 									  , GTextAlignmentLeft
+		 									  , GTextAlignmentLeft
+		 									  , GTextAlignmentLeft };
+	static const char *day_line = "Ma Ti On To Fr Lø Sø";
+	static const char *day_names[] = { "Ma", " Ti", "On", "To", "Fr", "Lø", "Sø" };
 #endif
