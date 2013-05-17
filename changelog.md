@@ -1,4 +1,4 @@
-v1.5 (May ?)
+v1.5 (May 18)
 
 * Added support for Norwegian
 * Cleanup of internal code
