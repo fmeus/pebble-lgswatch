@@ -1,14 +1,12 @@
 /*
   Project     : LGS Watch watchface
   Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
-  Revision    : $Id: lgs.c 1086 2013-05-06 19:54:05Z fmeus_lgs $
 */
 
-// #define DEBUG_MODE
-// #define LANGUAGE_TESTING
+#define LANGUAGE_TESTING
 #ifdef LANGUAGE_TESTING
-  static int ct = 0;
-  static int speed = 1;
+  static int ct = 1;
+  static int speed = 5;
 #endif
 
 
@@ -64,13 +62,8 @@ static bool first_cycle = true;
 */
 void setup_text_layer( TextLayer *newLayer, GRect rect, GTextAlignment align , GFont font ) {
   text_layer_init( newLayer, rect );
-#ifdef DEBUG_MODE
-  text_layer_set_text_color( newLayer, GColorBlack );
-  text_layer_set_background_color( newLayer, GColorWhite );
-#else
   text_layer_set_text_color( newLayer, GColorWhite );
   text_layer_set_background_color( newLayer, GColorClear );
-#endif
   text_layer_set_text_alignment( newLayer, align );
   text_layer_set_font( newLayer, font );
 }
@@ -154,6 +147,7 @@ void handle_tick( AppContextRef ctx, PebbleTickEvent *event ) {
 void handle_init( AppContextRef ctx ) {
   (void)ctx;
 
+  // ct = 0;
   window_init( &window, "LGS Watch" );
   window_stack_push( &window, true );
 
