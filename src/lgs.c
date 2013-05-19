@@ -3,7 +3,7 @@
   Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
 */
 
-#define LANGUAGE_TESTING
+// #define LANGUAGE_TESTING
 #ifdef LANGUAGE_TESTING
   static int ct = 1;
   static int speed = 5;
