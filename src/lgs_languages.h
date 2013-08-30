@@ -296,14 +296,14 @@
 
 	// Define date formats
 	#ifdef FORMAT_WEEK
-		static char format_week[] = "%V uke";
-		static char week_text[] = "00 uke";
+		static char format_week[] = "Uke %V";
+		static char week_text[] = "Uke 00";
 	#endif
 	static char format_date[] = "%e. ";
-	static char date_text[] = "23. feb";
+	static char date_text[] = "23. Feb";
 
 	// Month names
-	static const char *month_names[] = { "jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des" };
+	static const char *month_names[] = { "Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des" };
 
 	// Day names
 	static const GRect day_rect[] = { ConstantGRect(   8, 76, 20, 13 )
