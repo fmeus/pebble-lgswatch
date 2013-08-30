@@ -22,7 +22,7 @@
 
 
 // Define the watch face structure
-PBL_APP_INFO( MY_UUID, LGS_APP_NAME, "Little Gem Software", 1, 4, RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_WATCH_FACE );
+PBL_APP_INFO( MY_UUID, LGS_APP_NAME, "Little Gem Software", 1, 6, RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_WATCH_FACE );
 
 
 // All UI elements
