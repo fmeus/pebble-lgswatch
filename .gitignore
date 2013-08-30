@@ -13,3 +13,6 @@ pebble_app.ld
 
 # Ignore Mac stuff
 .DS_Store
+
+# Ignore releases
+releases
