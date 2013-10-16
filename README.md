@@ -22,7 +22,7 @@ Available in 8 langauges;
 - Italian
 - Norwegian
 
-Compiled version of this watchface can be downloaded [here](http://scriptogr.am/fmeus/pebble-lgs-watchface)  
+Compiled version of this watchface can be downloaded [here](http://sharedmemorydump.net/pebble-lgs-watchface)  
 The font used is Chicago, it is freely available for download [here](http://ttfonts.net/font/5767_Chicago.htm)
 
 [img]: https://dl.dropbox.com/u/265253/scriptogram/lgs_watchface.jpg
