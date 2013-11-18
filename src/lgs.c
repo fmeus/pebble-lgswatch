@@ -110,7 +110,6 @@ void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
     text_layer_set_text( text_time_layer, time_text );
 
     // Update AM/PM indicator (i.e. AM or PM or nothing when using 24-hour style)
-    // strftime( ampm_text, sizeof( ampm_text ), clock_is_24h_style() ? "\0" : "%p", tick_time );
     strftime( ampm_text, sizeof( ampm_text ), clock_is_24h_style() ? "" : "%p", tick_time );
     text_layer_set_text( text_ampm_layer, ampm_text );
   }
