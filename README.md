@@ -34,14 +34,8 @@ Clone this repository in an appropriate directory:
 
 	git clone https://github.com/fmeus/pebble-lgswatch.git
 
-Set up waf:
-
-	python ~/PebbleKit/Pebble/tools/create_pebble_project.py --symlink-only ~/PebbleKit/Pebble/sdk/ pebble-lgswatch
-	cd pebble-lgswatch
-
 Configure and build:
 
-	./waf configure
 	src/makeall.sh
 
 Compiled version can be found in the folder `releases`

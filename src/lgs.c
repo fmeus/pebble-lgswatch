@@ -1,6 +1,7 @@
 /*
   Project     : LGS Watch watchface
   Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
+  Pebble SDK  : 2.0-BETA2
 */
 
 // #define LANGUAGE_TESTING
@@ -11,9 +12,7 @@
 
 
 // Include the usual stuff
-#include "pebble_os.h"
-#include "pebble_app.h"
-#include "pebble_fonts.h"
+#include <pebble.h>
 
 
 // Specific watch face includes
@@ -21,23 +20,18 @@
 #include "lgs_languages.h"
 
 
-// Define the watch face structure
-PBL_APP_INFO( MY_UUID, LGS_APP_NAME, "Little Gem Software", 1, 6, RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_WATCH_FACE );
-
-
 // All UI elements
-Window        window;
-BmpContainer  background_image;
-BmpContainer  line_image;
-TextLayer     text_time_layer;
-TextLayer     text_ampm_layer;
-TextLayer     text_days_layer;
-TextLayer     text_today_layer;
-TextLayer     text_date_layer;
-TextLayer     text_week_layer;
-GFont         font_time;
-GFont         font_date;
-GFont         font_days;
+static Window      *window;
+static GBitmap     *background_image;
+static BitmapLayer *background_layer;
+static GBitmap     *line_image;
+static BitmapLayer *line_layer;
+static TextLayer   *text_time_layer;
+static TextLayer   *text_ampm_layer;
+static TextLayer   *text_days_layer;
+static TextLayer   *text_today_layer;
+static TextLayer   *text_date_layer;
+static TextLayer   *text_week_layer;
 
 
 // Define layer rectangles (x, y, width, height)
@@ -60,77 +54,74 @@ static bool first_cycle = true;
 /*
   Setup new TextLayer
 */
-void setup_text_layer( TextLayer *newLayer, GRect rect, GTextAlignment align , GFont font ) {
-  text_layer_init( newLayer, rect );
+static TextLayer * setup_text_layer( GRect rect, GTextAlignment align , GFont font ) {
+  TextLayer *newLayer = text_layer_create( rect );
   text_layer_set_text_color( newLayer, GColorWhite );
   text_layer_set_background_color( newLayer, GColorClear );
   text_layer_set_text_alignment( newLayer, align );
   text_layer_set_font( newLayer, font );
+
+  return newLayer;
 }
 
 
 /*
   Handle tick event
 */
-void handle_tick( AppContextRef ctx, PebbleTickEvent *event ) {
-  (void)ctx;
-
-  // Get the current time
-  PblTm currentTime;
-  get_time( &currentTime );
-
+void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
   // Handle day change
-  if ( ( ( event->units_changed & DAY_UNIT ) == DAY_UNIT ) || first_cycle ) {
+  if ( ( ( units_changed & DAY_UNIT ) == DAY_UNIT ) || first_cycle ) {
     // Update text layer for current day
-    int today = currentTime.tm_wday - 1; if ( today < 0 ) { today = 6; }
-    text_layer_set_text_alignment( &text_today_layer, day_align[today] );
-    layer_set_frame( &text_today_layer.layer, day_rect[today] );
-    text_layer_set_text( &text_today_layer, day_names[today] );
+    int today = tick_time->tm_wday - 1; if ( today < 0 ) { today = 6; }
+    text_layer_set_text_alignment( text_today_layer, day_align[today] );
+    layer_set_frame( text_layer_get_layer(text_today_layer), day_rect[today] );
+    text_layer_set_text( text_today_layer, day_names[today] );
 
     #ifdef LANGUAGE_EN
-      string_format_time( date_text, sizeof( date_text ), format_date, &currentTime );
-      strcat( date_text, ordinal_numbers[currentTime.tm_mday - 1] );
+      string_format_time( date_text, sizeof( date_text ), format_date, tick_time );
+      strcat( date_text, ordinal_numbers[tick_time->tm_mday - 1] );
     #else
-      string_format_time( date_text, sizeof( date_text ), format_date, &currentTime );
-      strcat( date_text, month_names[currentTime.tm_mon] );    
+      strftime( date_text, sizeof( date_text ), format_date, tick_time );
+      strcat( date_text, month_names[tick_time->tm_mon] );    
     #endif
 
-    text_layer_set_text( &text_date_layer, date_text );
+    text_layer_set_text( text_date_layer, date_text );
 
     // Update week or day of the year (i.e. Week 15 or 2013-118)
     #if defined(FORMAT_DOTY) || defined(FORMAT_DDMMYY) || defined(FORMAT_MMDDYY) || defined(FORMAT_WXDX)
-      string_format_time( alt_text, sizeof( alt_text ), alt_format, &currentTime );
-      text_layer_set_text( &text_week_layer, alt_text );
+      strftime( alt_text, sizeof( alt_text ), alt_format, tick_time );
+      text_layer_set_text( text_week_layer, alt_text );
     #else
-      string_format_time( week_text, sizeof( week_text ), format_week, &currentTime );
-      text_layer_set_text( &text_week_layer, week_text );
+      strftime( week_text, sizeof( week_text ), format_week, tick_time );
+      text_layer_set_text( text_week_layer, week_text );
     #endif
   }
 
   // Handle time (hour and minute) change
-  if ( ( ( event->units_changed & MINUTE_UNIT ) == MINUTE_UNIT ) || first_cycle ) {
+  if ( ( ( units_changed & MINUTE_UNIT ) == MINUTE_UNIT ) || first_cycle ) {
     // Display hours (i.e. 18 or 06)
-    string_format_time( time_text, sizeof( time_text ), clock_is_24h_style() ? "%H:%M" : "%I:%M", &currentTime );
+    strftime( time_text, sizeof( time_text ), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time );
 
     // Remove leading zero (only in 12h-mode)
     if ( !clock_is_24h_style() && (time_text[0] == '0') ) {
       memmove( time_text, &time_text[1], sizeof( time_text ) - 1 );
     }
 
-    text_layer_set_text( &text_time_layer, time_text );
+    text_layer_set_text( text_time_layer, time_text );
 
     // Update AM/PM indicator (i.e. AM or PM or nothing when using 24-hour style)
-    string_format_time( ampm_text, sizeof( ampm_text ), clock_is_24h_style() ? "\0" : "%p", &currentTime );
-    text_layer_set_text( &text_ampm_layer, ampm_text );
+    // strftime( ampm_text, sizeof( ampm_text ), clock_is_24h_style() ? "\0" : "%p", tick_time );
+    strftime( ampm_text, sizeof( ampm_text ), clock_is_24h_style() ? "" : "%p", tick_time );
+    text_layer_set_text( text_ampm_layer, ampm_text );
   }
 
 #ifdef LANGUAGE_TESTING
     // Walk though all the days of the week
-    text_layer_set_text_alignment( &text_today_layer, day_align[ct] );
-    layer_set_frame( &text_today_layer.layer, day_rect[ct] );
-    text_layer_set_text( &text_today_layer, day_names[ct] );
+    text_layer_set_text_alignment( text_today_layer, day_align[ct] );
+    layer_set_frame( text_layer_get_layer(text_today_layer), day_rect[ct] );
+    text_layer_set_text( text_today_layer, day_names[ct] );
 
-    if ( currentTime.tm_sec % speed == 0 ) { ct++; }
+    if ( tick_time->tm_sec % speed == 0 ) { ct++; }
     if ( ct == 7 ) { ct = 0; }
 #endif
 
@@ -144,102 +135,108 @@ void handle_tick( AppContextRef ctx, PebbleTickEvent *event ) {
 /*
   Initialization
 */
-void handle_init( AppContextRef ctx ) {
-  (void)ctx;
+void handle_init( void ) {
+  window = window_create();
+  window_stack_push( window, true );
+  Layer *window_layer = window_get_root_layer( window );
 
-  // ct = 0;
-  window_init( &window, "LGS Watch" );
-  window_stack_push( &window, true );
-
-  // Load resources
-  resource_init_current_app( &APP_RESOURCES );
-
-  // Load background image
-  bmp_init_container( RESOURCE_ID_IMAGE_BACKGROUND, &background_image );
-
-  // Add background image to the window
-  layer_add_child( &window.layer, &background_image.layer.layer );
+  // Background image
+  background_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BACKGROUND );
+  background_layer = bitmap_layer_create( layer_get_frame( window_layer ) );
+  bitmap_layer_set_bitmap( background_layer, background_image );
+  layer_add_child( window_layer, bitmap_layer_get_layer( background_layer ) );
 
   // Adjust GRect for Hours, Minutes and Blink to compensate for missing AM/PM indicator
   if ( clock_is_24h_style() ) {
     TIME_RECT.origin.y = TIME_RECT.origin.y + 6;
   }
 
-  // Load custom fonts
-  font_time = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_SUBSET_40 ) );
-  font_date = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_20 ) );
-  font_days = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) );
-
   // Setup time layer
-  setup_text_layer( &text_time_layer, TIME_RECT, GTextAlignmentCenter, font_time );
-  layer_add_child( &window.layer, &text_time_layer.layer );
+  text_time_layer = setup_text_layer( TIME_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_SUBSET_40 ) ) );
+  layer_add_child( window_layer, text_layer_get_layer(text_time_layer) );
 
   // Setup AM/PM name layer
-  setup_text_layer( &text_ampm_layer, AMPM_RECT, GTextAlignmentCenter, font_days );
-  layer_add_child( &window.layer, &text_ampm_layer.layer );
+  text_ampm_layer = setup_text_layer( AMPM_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) ) );
+  layer_add_child( window_layer, text_layer_get_layer(text_ampm_layer) );
 
   // Setup days line layer
-  setup_text_layer( &text_days_layer, DAYS_RECT, GTextAlignmentCenter, font_days );
-  layer_add_child( &window.layer, &text_days_layer.layer );
-  text_layer_set_text( &text_days_layer, day_line );
+  text_days_layer = setup_text_layer( DAYS_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) ) );
+  layer_add_child( window_layer, text_layer_get_layer(text_days_layer) );
+  text_layer_set_text( text_days_layer, day_line );
 
   // Setup current day layer
-  setup_text_layer( &text_today_layer, day_rect[0], GTextAlignmentCenter, font_days );
-  text_layer_set_text_color( &text_today_layer, GColorBlack );
-  text_layer_set_background_color( &text_today_layer, GColorWhite );
-  layer_add_child( &window.layer, &text_today_layer.layer );
+  text_today_layer = setup_text_layer( day_rect[0], GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) ) );
+  text_layer_set_text_color( text_today_layer, GColorBlack );
+  text_layer_set_background_color( text_today_layer, GColorWhite );
+  layer_add_child( window_layer, text_layer_get_layer(text_today_layer) );
 
   // Setup date layer
-  setup_text_layer( &text_date_layer, DATE_RECT, GTextAlignmentCenter, font_date );
-  layer_add_child( &window.layer, &text_date_layer.layer );
+  text_date_layer = setup_text_layer( DATE_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_20 ) ) );
+  layer_add_child( window_layer, text_layer_get_layer(text_date_layer) );
 
   // Setup week layer
-  setup_text_layer( &text_week_layer, WEEK_RECT, GTextAlignmentCenter, font_date );
-  layer_add_child( &window.layer, &text_week_layer.layer );
+  text_week_layer = setup_text_layer( WEEK_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_20 ) ) );
+  layer_add_child( window_layer, text_layer_get_layer(text_week_layer) );
 
   // Draw image to divide day box from top line
-  bmp_init_container( RESOURCE_ID_IMAGE_LINE, &line_image );
-  line_image.layer.layer.frame.origin.x = 2;
-  line_image.layer.layer.frame.origin.y = 77;
-  layer_add_child( &window.layer, &line_image.layer.layer );
+  line_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_LINE );
+  GRect frame = (GRect) {
+    .origin = {2,77},
+    .size = (line_image)->bounds.size
+  };
 
-  // Force tick event (to avoid blank screen)
-  handle_tick( ctx, NULL );
+  // line_layer = bitmap_layer_create( layer_get_frame( window_layer ) );
+  line_layer = bitmap_layer_create( frame );
+  bitmap_layer_set_bitmap( line_layer, line_image );
+  layer_add_child( window_layer, bitmap_layer_get_layer( line_layer ) );
+
+  // Subscribe to services
+  #ifdef LANGUAGE_TESTING
+    tick_timer_service_subscribe( SECOND_UNIT, handle_tick );
+  #else
+    tick_timer_service_subscribe( MINUTE_UNIT, handle_tick );
+  #endif
+
+  // Avoids a blank screen on watch start.
+  time_t now = time(NULL);
+  struct tm *tick_time = localtime(&now);
+  handle_tick( tick_time, MINUTE_UNIT );
 }
 
 
 /*
   dealloc
 */
-void handle_deinit( AppContextRef ctx ) {
-  (void)ctx;
+void handle_deinit( void ) {
+  // Subscribe from services
+  tick_timer_service_unsubscribe();
 
-  // Unload bitmaps
-  bmp_deinit_container( &background_image );
-  bmp_deinit_container( &line_image );
+  // Destroy image objects
+  layer_remove_from_parent( bitmap_layer_get_layer( background_layer ) );
+  bitmap_layer_destroy( background_layer );
+  gbitmap_destroy( background_image );
+  layer_remove_from_parent( bitmap_layer_get_layer( line_layer ) );
+  bitmap_layer_destroy( line_layer );
+  gbitmap_destroy( line_image );
 
-  // Unload custom fonts
-  fonts_unload_custom_font( font_time );
-  fonts_unload_custom_font( font_date );
-  fonts_unload_custom_font( font_days );
+  // Destroy tex tobjects
+  text_layer_destroy(text_time_layer);
+  text_layer_destroy(text_ampm_layer);
+  text_layer_destroy(text_days_layer);
+  text_layer_destroy(text_today_layer);
+  text_layer_destroy(text_date_layer);
+  text_layer_destroy(text_week_layer);
+
+  // Destroy window
+  window_destroy( window );
 }
 
 
 /*
   Main process
 */
-void pbl_main( void *params ) {
-  PebbleAppHandlers handlers = {
-    .init_handler = &handle_init,
-    .deinit_handler = &handle_deinit,
-    .tick_info = {
-      .tick_handler = &handle_tick,
-#ifdef LANGUAGE_TESTING
-      .tick_units = SECOND_UNIT
-#else
-      .tick_units = MINUTE_UNIT
-#endif
-    }
-  };
-  app_event_loop( params, &handlers );
+int main( void ) {
+  handle_init();
+  app_event_loop();
+  handle_deinit();
 }

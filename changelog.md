@@ -1,3 +1,7 @@
+v2.0.0 (Nov xx)
+
+* Updated for Pebble SDK 2
+
 v1.5 (May 18)
 
 * Added support for Norwegian

@@ -1,0 +1,48 @@
+{
+  "uuid": "52d59234-a54b-4da1-b048-5c5ec121f54d",
+  "shortName": "LGS Watch",
+  "longName": "LGS Watch",
+  "companyName": "Little Gem Software",
+  "versionCode": 2,
+  "versionLabel": "2.0.0",
+  "watchapp": {
+    "watchface": true
+  },
+  "appKeys": {},
+  "resources": {
+    "media": [
+      {
+        "menuIcon": true,
+        "type": "png",
+        "name": "IMAGE_MENU_ICON",
+        "file": "images/menu_icon_lgs_watch.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BACKGROUND",
+        "file": "images/background.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_LINE",
+        "file": "images/black_line.png"
+      },
+      {
+        "type": "font",
+        "name": "FONT_CHICAGO_20",
+        "file": "fonts/CHICAGO.ttf"
+      },
+      {
+        "type": "font",
+        "name": "FONT_CHICAGO_12",
+        "file": "fonts/CHICAGO.ttf"
+      },
+      {
+        "characterRegex": "[:0-9]",
+        "type": "font",
+        "name": "FONT_CHICAGO_SUBSET_40",
+        "file": "fonts/CHICAGO.ttf"
+      }
+    ]
+  }
+}

@@ -1,6 +1,7 @@
 /*
   Project     : LGS Watch watchface
   Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
+  Pebble SDK  : 2.0-BETA2
 */
 
 // This works around the inability to use the current GRect macro for constants. (Taken from drop_zone.c)
@@ -9,27 +10,19 @@
 
 // Special configuration for the information displayed on the last line of the watchface
 #if defined(FORMAT_DOTY)
-	#define MY_UUID { 0xFC, 0x3F, 0x2F, 0x4D, 0xD1, 0x0B, 0x4B, 0xD4, 0xB4, 0xF1, 0x97, 0xA2, 0xA1, 0x38, 0x22, 0x5D }
-
 	static char alt_text[] = "0000-000";
 	static char alt_format[] = "%Y-%j";
 #elif defined(FORMAT_DDMMYY)
-	#define MY_UUID { 0x2C, 0xC6, 0xAA, 0xA0, 0x88, 0x87, 0x47, 0x20, 0x88, 0x7A, 0x51, 0xA9, 0xA1, 0x68, 0xFE, 0xC6 }
-
 	static char alt_text[] = "00/00/00";
 	static char alt_format[] = "%d/%m/%y";
 #elif defined(FORMAT_MMDDYY)
-	#define MY_UUID { 0xF0, 0xD0, 0x40, 0x92, 0x5B, 0xB9, 0x40, 0x06, 0xB0, 0x7C, 0x4C, 0x07, 0xCE, 0x39, 0xA0, 0xA0 }
-
 	static char alt_text[] = "00/00/00";
 	static char alt_format[] = "%m/%d/%y";
 #elif defined(FORMAT_WXDX)
-	#define MY_UUID { 0xA8, 0x1A, 0xCC, 0x45, 0xD7, 0xC4, 0x49, 0x5F, 0xA6, 0x18, 0x23, 0xCF, 0x06, 0x54, 0xDD, 0x76 }
-
 	static char alt_text[] = "W00 D000";
 	static char alt_format[] = "W%V D%j";
 #elif defined(FORMAT_WEEK)
-	#define MY_UUID { 0x52, 0xD5, 0x92, 0x34, 0xA5, 0x4B, 0x4D, 0xA1, 0xB0, 0x48, 0x5C, 0x5E, 0xC1, 0x21, 0xF5, 0x4D }
+
 #endif
 
 
@@ -75,8 +68,6 @@
 
 // Dutch
 #ifdef LANGUAGE_NL
-	#define LGS_APP_NAME "LGS Watch NL"
-
 	// Define date formats
 	#ifdef FORMAT_WEEK
 		static char format_week[] = "Week %V";
@@ -112,8 +103,6 @@
 
 // German
 #ifdef LANGUAGE_DE
-	#define LGS_APP_NAME "LGS Watch DE"
-
 	// Define date formats
 	#ifdef FORMAT_WEEK
 		static char format_week[] = "Woche %V";
@@ -149,8 +138,6 @@
 
 // French
 #ifdef LANGUAGE_FR
-	#define LGS_APP_NAME "LGS Watch FR"
-
 	// Define date formats
 	#ifdef FORMAT_WEEK
 		static char format_week[] = "Semaine %V";
@@ -186,8 +173,6 @@
 
 // Croation
 #ifdef LANGUAGE_HR
-	#define LGS_APP_NAME "LGS Watch HR"
-
 	// Define date formats
 	#ifdef FORMAT_WEEK
 		static char format_week[] = "%V. tjedan";
@@ -222,8 +207,6 @@
 
 // Spanish
 #ifdef LANGUAGE_ES
-	#define LGS_APP_NAME "LGS Watch ES"
-
 	// Define date formats
 	#ifdef FORMAT_WEEK
 		static char format_week[] = "%V. semana";
@@ -257,8 +240,6 @@
 
 // Italian
 #ifdef LANGUAGE_IT
-	#define LGS_APP_NAME "LGS Watch IT"
-
 	// Define date formats
 	#ifdef FORMAT_WEEK
 		static char format_week[] = "%V. Setti.	";
@@ -292,8 +273,6 @@
 
 // Norwegian
 #ifdef LANGUAGE_NO
-	#define LGS_APP_NAME "LGS Watch NO"
-
 	// Define date formats
 	#ifdef FORMAT_WEEK
 		static char format_week[] = "Uke %V";
