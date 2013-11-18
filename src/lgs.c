@@ -32,7 +32,9 @@ static TextLayer   *text_days_layer;
 static TextLayer   *text_today_layer;
 static TextLayer   *text_date_layer;
 static TextLayer   *text_week_layer;
-
+static GFont       *font_time;
+static GFont       *font_days;
+static GFont       *font_date;
 
 // Define layer rectangles (x, y, width, height)
 GRect TIME_RECT   = ConstantGRect(  9,   8, 124, 45 );
@@ -150,31 +152,36 @@ void handle_init( void ) {
     TIME_RECT.origin.y = TIME_RECT.origin.y + 6;
   }
 
+  // Load fonts
+  font_time = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_SUBSET_40 ) );
+  font_days = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) );
+  font_date = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_20 ) );
+
   // Setup time layer
-  text_time_layer = setup_text_layer( TIME_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_SUBSET_40 ) ) );
+  text_time_layer = setup_text_layer( TIME_RECT, GTextAlignmentCenter, font_time );
   layer_add_child( window_layer, text_layer_get_layer(text_time_layer) );
 
   // Setup AM/PM name layer
-  text_ampm_layer = setup_text_layer( AMPM_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) ) );
+  text_ampm_layer = setup_text_layer( AMPM_RECT, GTextAlignmentCenter, font_days );
   layer_add_child( window_layer, text_layer_get_layer(text_ampm_layer) );
 
   // Setup days line layer
-  text_days_layer = setup_text_layer( DAYS_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) ) );
+  text_days_layer = setup_text_layer( DAYS_RECT, GTextAlignmentCenter, font_days );
   layer_add_child( window_layer, text_layer_get_layer(text_days_layer) );
   text_layer_set_text( text_days_layer, day_line );
 
   // Setup current day layer
-  text_today_layer = setup_text_layer( day_rect[0], GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) ) );
+  text_today_layer = setup_text_layer( day_rect[0], GTextAlignmentCenter, font_days );
   text_layer_set_text_color( text_today_layer, GColorBlack );
   text_layer_set_background_color( text_today_layer, GColorWhite );
   layer_add_child( window_layer, text_layer_get_layer(text_today_layer) );
 
   // Setup date layer
-  text_date_layer = setup_text_layer( DATE_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_20 ) ) );
+  text_date_layer = setup_text_layer( DATE_RECT, GTextAlignmentCenter, font_date );
   layer_add_child( window_layer, text_layer_get_layer(text_date_layer) );
 
   // Setup week layer
-  text_week_layer = setup_text_layer( WEEK_RECT, GTextAlignmentCenter, fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_20 ) ) );
+  text_week_layer = setup_text_layer( WEEK_RECT, GTextAlignmentCenter, font_date );
   layer_add_child( window_layer, text_layer_get_layer(text_week_layer) );
 
   // Draw image to divide day box from top line
@@ -225,6 +232,11 @@ void handle_deinit( void ) {
   text_layer_destroy(text_today_layer);
   text_layer_destroy(text_date_layer);
   text_layer_destroy(text_week_layer);
+
+  // Destroy font objects
+  fonts_unload_custom_font( font_time );
+  fonts_unload_custom_font( font_days );
+  fonts_unload_custom_font( font_date );
 
   // Destroy window
   window_destroy( window );
