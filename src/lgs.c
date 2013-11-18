@@ -78,7 +78,7 @@ void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
     text_layer_set_text( text_today_layer, day_names[today] );
 
     #ifdef LANGUAGE_EN
-      string_format_time( date_text, sizeof( date_text ), format_date, tick_time );
+      strftime( date_text, sizeof( date_text ), format_date, tick_time );
       strcat( date_text, ordinal_numbers[tick_time->tm_mday - 1] );
     #else
       strftime( date_text, sizeof( date_text ), format_date, tick_time );
