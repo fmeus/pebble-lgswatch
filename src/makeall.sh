@@ -59,3 +59,5 @@ for ln in "${languages[@]}"
 do
 	build $ln
 done
+
+pebble clean
