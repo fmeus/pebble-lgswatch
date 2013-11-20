@@ -4,7 +4,7 @@
   "longName": "LGS Watch",
   "companyName": "Little Gem Software",
   "versionCode": 2,
-  "versionLabel": "2.0.0",
+  "versionLabel": "2.1",
   "watchapp": {
     "watchface": true
   },
@@ -26,6 +26,46 @@
         "type": "png",
         "name": "IMAGE_LINE",
         "file": "images/black_line.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BATT_000_020",
+        "file": "images/batt_000_020.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BATT_020_040",
+        "file": "images/batt_020_040.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BATT_040_060",
+        "file": "images/batt_040_060.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BATT_060_080",
+        "file": "images/batt_060_080.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BATT_080_100",
+        "file": "images/batt_080_100.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BATT_CHARGING",
+        "file": "images/batt_charging.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_BLUETOOTH",
+        "file": "images/bluetooth.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_NO_BLUETOOTH",
+        "file": "images/no_bluetooth.png"
       },
       {
         "type": "font",

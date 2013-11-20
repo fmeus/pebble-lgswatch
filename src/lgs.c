@@ -4,15 +4,15 @@
   Pebble SDK  : 2.0-BETA2
 */
 
+// Include the usual stuff
+#include <pebble.h>
+
+
 // #define LANGUAGE_TESTING
 #ifdef LANGUAGE_TESTING
   static int ct = 1;
   static int speed = 5;
 #endif
-
-
-// Include the usual stuff
-#include <pebble.h>
 
 
 // Specific watch face includes
@@ -23,9 +23,13 @@
 // All UI elements
 static Window      *window;
 static GBitmap     *background_image;
-static BitmapLayer *background_layer;
 static GBitmap     *line_image;
+static GBitmap     *battery_image;
+static GBitmap     *bluetooth_image;
+static BitmapLayer *background_layer;
 static BitmapLayer *line_layer;
+static BitmapLayer *battery_layer;
+static BitmapLayer *bluetooth_layer;
 static TextLayer   *text_time_layer;
 static TextLayer   *text_ampm_layer;
 static TextLayer   *text_days_layer;
@@ -36,12 +40,15 @@ static GFont       *font_time;
 static GFont       *font_days;
 static GFont       *font_date;
 
+
 // Define layer rectangles (x, y, width, height)
-GRect TIME_RECT   = ConstantGRect(  9,   8, 124, 45 );
-GRect AMPM_RECT   = ConstantGRect( 51,  55,  40, 16 );
-GRect DATE_RECT   = ConstantGRect(  0, 100, 144, 25 );
-GRect WEEK_RECT   = ConstantGRect(  0, 130, 144, 25 );
-GRect DAYS_RECT   = ConstantGRect(  0,  76, 144, 13 );
+GRect TIME_RECT  = ConstantGRect(   9,   8, 124,  45 );
+GRect AMPM_RECT  = ConstantGRect(  51,  55,  40,  16 );
+GRect DATE_RECT  = ConstantGRect(   0, 100, 144,  25 );
+GRect WEEK_RECT  = ConstantGRect(   0, 130, 144,  25 );
+GRect DAYS_RECT  = ConstantGRect(   0,  76, 144,  13 );
+GRect BATT_RECT  = ConstantGRect( 122,  63,  17,   9 );
+GRect BT_RECT    = ConstantGRect( 103,  63,  17,   9 );
 
 
 // Define placeholders for time and date
@@ -68,7 +75,64 @@ static TextLayer * setup_text_layer( GRect rect, GTextAlignment align , GFont fo
 
 
 /*
-  Handle tick event
+  Handle bluetooth events
+*/
+void handle_bluetooth( bool connected ) {
+  if ( bluetooth_image != NULL ) {
+    gbitmap_destroy( bluetooth_image );
+  }
+
+  if ( connected ) {
+    bluetooth_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BLUETOOTH );
+  } else {
+    bluetooth_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_NO_BLUETOOTH );
+    vibes_short_pulse();
+  }
+
+  bitmap_layer_set_bitmap( bluetooth_layer, bluetooth_image );
+}
+
+
+/*
+  Handle battery events
+*/
+void handle_battery( BatteryChargeState charge_state ) {
+  if ( battery_image != NULL ) {
+    gbitmap_destroy( battery_image );
+  }
+
+  if ( charge_state.is_charging ) {
+
+    battery_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BATT_CHARGING );
+
+  } else {
+
+    switch ( charge_state.charge_percent ) {
+      case 0 ... 20:
+        battery_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BATT_000_020 );
+        break;
+      case 21 ... 40:
+        battery_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BATT_020_040 );
+        break;
+      case 41 ... 60:
+        battery_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BATT_040_060 );
+        break;
+      case 61 ... 80:
+        battery_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BATT_060_080 );
+        break;
+      case 81 ... 100:
+        battery_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BATT_080_100 );
+        break;
+      }
+
+  }
+
+  bitmap_layer_set_bitmap( battery_layer, battery_image );
+}
+
+
+/*
+  Handle tick events
 */
 void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
   // Handle day change
@@ -119,7 +183,7 @@ void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
 #ifdef LANGUAGE_TESTING
     // Walk though all the days of the week
     text_layer_set_text_alignment( text_today_layer, day_align[ct] );
-    layer_set_frame( text_layer_get_layer(text_today_layer), day_rect[ct] );
+    layer_set_frame( text_layer_get_layer( text_today_layer) , day_rect[ct] );
     text_layer_set_text( text_today_layer, day_names[ct] );
 
     if ( tick_time->tm_sec % speed == 0 ) { ct++; }
@@ -159,39 +223,45 @@ void handle_init( void ) {
 
   // Setup time layer
   text_time_layer = setup_text_layer( TIME_RECT, GTextAlignmentCenter, font_time );
-  layer_add_child( window_layer, text_layer_get_layer(text_time_layer) );
+  layer_add_child( window_layer, text_layer_get_layer( text_time_layer ) );
 
   // Setup AM/PM name layer
   text_ampm_layer = setup_text_layer( AMPM_RECT, GTextAlignmentCenter, font_days );
-  layer_add_child( window_layer, text_layer_get_layer(text_ampm_layer) );
+  layer_add_child( window_layer, text_layer_get_layer( text_ampm_layer ) );
 
   // Setup days line layer
   text_days_layer = setup_text_layer( DAYS_RECT, GTextAlignmentCenter, font_days );
-  layer_add_child( window_layer, text_layer_get_layer(text_days_layer) );
+  layer_add_child( window_layer, text_layer_get_layer( text_days_layer ) );
   text_layer_set_text( text_days_layer, day_line );
 
   // Setup current day layer
   text_today_layer = setup_text_layer( day_rect[0], GTextAlignmentCenter, font_days );
   text_layer_set_text_color( text_today_layer, GColorBlack );
   text_layer_set_background_color( text_today_layer, GColorWhite );
-  layer_add_child( window_layer, text_layer_get_layer(text_today_layer) );
+  layer_add_child( window_layer, text_layer_get_layer( text_today_layer ) );
 
   // Setup date layer
   text_date_layer = setup_text_layer( DATE_RECT, GTextAlignmentCenter, font_date );
-  layer_add_child( window_layer, text_layer_get_layer(text_date_layer) );
+  layer_add_child( window_layer, text_layer_get_layer( text_date_layer ) );
 
   // Setup week layer
   text_week_layer = setup_text_layer( WEEK_RECT, GTextAlignmentCenter, font_date );
-  layer_add_child( window_layer, text_layer_get_layer(text_week_layer) );
+  layer_add_child( window_layer, text_layer_get_layer( text_week_layer ) );
+
+  // Setup battery layer
+  battery_layer = bitmap_layer_create( BATT_RECT );
+  layer_add_child( window_layer, bitmap_layer_get_layer( battery_layer ) );
+
+  // Setup bluetooth layer
+  bluetooth_layer = bitmap_layer_create( BT_RECT );
+  layer_add_child( window_layer, bitmap_layer_get_layer( bluetooth_layer ) );
 
   // Draw image to divide day box from top line
   line_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_LINE );
   GRect frame = (GRect) {
-    .origin = {2,77},
-    .size = (line_image)->bounds.size
+    .origin = { 2, 77 },
+    .size = ( line_image )->bounds.size
   };
-
-  // line_layer = bitmap_layer_create( layer_get_frame( window_layer ) );
   line_layer = bitmap_layer_create( frame );
   bitmap_layer_set_bitmap( line_layer, line_image );
   layer_add_child( window_layer, bitmap_layer_get_layer( line_layer ) );
@@ -203,10 +273,29 @@ void handle_init( void ) {
     tick_timer_service_subscribe( MINUTE_UNIT, handle_tick );
   #endif
 
+  // Force update for battery and bluetooth status
+  handle_battery( battery_state_service_peek() );
+  handle_bluetooth( bluetooth_connection_service_peek() );
+
+  battery_state_service_subscribe( &handle_battery );
+  bluetooth_connection_service_subscribe( &handle_bluetooth );
+
   // Avoids a blank screen on watch start.
   time_t now = time(NULL);
   struct tm *tick_time = localtime(&now);
   handle_tick( tick_time, MINUTE_UNIT );
+}
+
+
+/*
+  Destroy GBitmap and BitmapLayer
+*/
+void destroy_graphics( GBitmap *image, BitmapLayer *layer ) {
+  layer_remove_from_parent( bitmap_layer_get_layer( layer ) );
+  bitmap_layer_destroy( layer );
+  if ( image != NULL ) {
+    gbitmap_destroy( image );
+  }
 }
 
 
@@ -216,23 +305,22 @@ void handle_init( void ) {
 void handle_deinit( void ) {
   // Subscribe from services
   tick_timer_service_unsubscribe();
+  battery_state_service_unsubscribe();
 
   // Destroy image objects
-  layer_remove_from_parent( bitmap_layer_get_layer( background_layer ) );
-  bitmap_layer_destroy( background_layer );
-  gbitmap_destroy( background_image );
-  layer_remove_from_parent( bitmap_layer_get_layer( line_layer ) );
-  bitmap_layer_destroy( line_layer );
-  gbitmap_destroy( line_image );
+  destroy_graphics( background_image, background_layer );
+  destroy_graphics( line_image, line_layer );
+  destroy_graphics( battery_image, battery_layer );
+  destroy_graphics( bluetooth_image, bluetooth_layer );
 
   // Destroy tex tobjects
-  text_layer_destroy(text_time_layer);
-  text_layer_destroy(text_ampm_layer);
-  text_layer_destroy(text_days_layer);
-  text_layer_destroy(text_today_layer);
-  text_layer_destroy(text_date_layer);
-  text_layer_destroy(text_week_layer);
-
+  text_layer_destroy( text_time_layer );
+  text_layer_destroy( text_ampm_layer );
+  text_layer_destroy( text_days_layer );
+  text_layer_destroy( text_today_layer );
+  text_layer_destroy( text_date_layer );
+  text_layer_destroy( text_week_layer );
+  
   // Destroy font objects
   fonts_unload_custom_font( font_time );
   fonts_unload_custom_font( font_days );

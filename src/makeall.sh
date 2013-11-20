@@ -3,7 +3,7 @@
 # Project     : LGS Watch watchface
 # Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
 
-VER=2.0
+VER=2.1
 REL=./releases/
 
 function std_version {
@@ -47,14 +47,14 @@ function wxdx_version {
 }
 
 function build {
-	std_version $1 $VER
 	doty_version $1 $VER
 	ddmmyy_version $1 $VER
 	mmddyy_version $1 $VER
 	wxdx_version $1 $VER
+	std_version $1 $VER
 }
 
-languages=(EN NL FR DE HR ES IT NO)
+languages=(EN FR DE HR ES IT NO NL)
 for ln in "${languages[@]}"
 do
 	build $ln

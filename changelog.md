@@ -1,4 +1,8 @@
-v2.0.0 (Nov xx)
+v2.1 (Nov 21)
+
+* Added battery and bluetooth status information
+
+v2.0 (Nov 18)
 
 * Updated for Pebble SDK 2
 

@@ -1,2 +1,2 @@
-#define LANGUAGE_NO
-#define FORMAT_WXDX
+#define LANGUAGE_NL
+#define FORMAT_WEEK
