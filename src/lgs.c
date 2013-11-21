@@ -44,11 +44,11 @@ static GFont       *font_date;
 // Define layer rectangles (x, y, width, height)
 GRect TIME_RECT  = ConstantGRect(   9,   8, 124,  45 );
 GRect AMPM_RECT  = ConstantGRect(  51,  55,  40,  16 );
-GRect DATE_RECT  = ConstantGRect(   0, 100, 144,  25 );
-GRect WEEK_RECT  = ConstantGRect(   0, 130, 144,  25 );
+GRect DATE_RECT  = ConstantGRect(   0, 105, 144,  25 );
+GRect WEEK_RECT  = ConstantGRect(   0, 132, 144,  25 );
 GRect DAYS_RECT  = ConstantGRect(   0,  76, 144,  13 );
-GRect BATT_RECT  = ConstantGRect( 122,  63,  17,   9 );
-GRect BT_RECT    = ConstantGRect( 103,  63,  17,   9 );
+GRect BATT_RECT  = ConstantGRect( 123,  94,  17,   9 );
+GRect BT_RECT    = ConstantGRect(   4,  94,  17,   9 );
 
 
 // Define placeholders for time and date
