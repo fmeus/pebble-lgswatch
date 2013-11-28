@@ -2,7 +2,6 @@
 # Ignore build generated files
 build
 .lock-waf*
-wscript
 
 # Ignore Mac stuff
 .DS_Store
