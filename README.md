@@ -31,7 +31,7 @@ The font used is Chicago, it is freely available for download [here](http://ttfo
 ## Bluethooth Connection Status
 
 | Display                                 | Information                  |
-+:---------------------------------------:|:-----------------------------|
+|:---------------------------------------:|:-----------------------------|
 | ![](/resources/images/bluetooth.png)    | Connected to smartphone      |
 | ![](/resources/images/no_bluetooth.png) | Disconnected from smartphone |
 
