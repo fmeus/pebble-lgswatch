@@ -26,9 +26,9 @@ The font used is Chicago, it is freely available for download [here](http://ttfo
 
 | LGS Watch               | Information                                     |
 |:-----------------------:|:------------------------------------------------|
-| ![LGS Watch][lgs_watch] | 1 - 12h or 24 format, based on you Pebble setup<br/>2 - Day of the week indicator<br/>3 - Battery and Bluethooth status information<br/>4 - Date<br/>5 - Second date line |
+| ![LGS Watch][lgs_watch] | 1 - 12h or 24 format, based on you Pebble setup<br/>2 - Day of the week indicator<br/>3 - Battery and Bluetooth status information<br/>4 - Date<br/>5 - Second date line |
 
-## Bluethooth Connection Status
+## Bluetooth Connection Status
 
 | Display                                 | Information                  |
 |:---------------------------------------:|:-----------------------------|
