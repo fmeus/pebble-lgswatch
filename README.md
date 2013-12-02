@@ -7,8 +7,8 @@ Features:
 * Day of the week indication
 * Configurable through the Pebble app on your smartphone
 * Display battery and bluetooth status information (configurable, default On)
-* Supporting 8 different languages (configurable, default English)
-	- Croation
+* Supporting 9 different languages (configurable, default English)
+	- Croatian
 	- Dutch
 	- English
 	- Finnish
