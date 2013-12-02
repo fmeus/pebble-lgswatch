@@ -4,11 +4,16 @@
   "longName": "LGS Watch",
   "companyName": "Little Gem Software",
   "versionCode": 2,
-  "versionLabel": "2.1",
+  "versionLabel": "2.2",
+  "capabilities": [ "configurable" ],
   "watchapp": {
     "watchface": true
   },
-  "appKeys": {},
+  "appKeys": {
+    "status": 0,
+    "language": 1,
+    "format": 2
+    },
   "resources": {
     "media": [
       {
@@ -21,11 +26,6 @@
         "type": "png",
         "name": "IMAGE_BACKGROUND",
         "file": "images/background.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_LINE",
-        "file": "images/black_line.png"
       },
       {
         "type": "png",

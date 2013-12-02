@@ -1,36 +1,60 @@
 LGS Watch (Watchface for Pebble Watch)
 =========
 
-It shows the time (12h and 24h modes are supported), month, (ordinal) day number and week number. 
+Features:
 
-The current day is highlighted in the center line.
-
-The alternative version of the watch face displays Year and Day of the year (i.e. 2013-18) instead of the week number. 
-
-| Week  | Day of the Year |
-|-------|------|
-| ![Week][img] | ![Day of the Year][img_doty] |
-
-Available in 8 langauges;
-
-- English
-- Spanish
-- German
-- Dutch
-- French
-- Croation
-- Italian
-- Norwegian
+* Display time in either 12h or 24h format
+* Day of the week indication
+* Configurable through the Pebble app on your smartphone
+* Display battery and bluetooth status information (configurable, default On)
+* Supporting 8 different languages (configurable, default English)
+	- Croation
+	- Dutch
+	- English
+	- Finnish
+	- French
+	- German
+	- Italian
+	- Norwegian
+	- Spanish	
+* Second date information line (configurable, default Week)
 
 Compiled version of this watchface can be downloaded [here](http://sharedmemorydump.net/pebble-lgs-watchface)  
 The font used is Chicago, it is freely available for download [here](http://ttfonts.net/font/5767_Chicago.htm)
 
-[img]: https://dl.dropbox.com/u/265253/scriptogram/lgs_watchface.jpg
-[img_doty]: https://dl.dropbox.com/u/265253/scriptogram/lgs_watchface_doty.jpg
+## LGS Watch
+
+| LGS Watch               | Information                                     |
+|:-----------------------:|:------------------------------------------------|
+| ![LGS Watch][lgs_watch] | 1 - 12h or 24 format, based on you Pebble setup<br/>2 - Day of the week indicator<br/>3 - Battery and Bluethooth status information<br/>4 - Date<br/>5 - Second date line |
+
+## Bluethooth Connection Status
+
+| Display                                 | Information                  |
++:---------------------------------------:|:-----------------------------|
+| ![](/resources/images/bluetooth.png)    | Connected to smartphone      |
+| ![](/resources/images/no_bluetooth.png) | Disconnected from smartphone |
+
+## Battery Status
+
+| Display                                  | Information |
+|:----------------------------------------:|:------------|
+| ![](/resources/images/batt_charging.png) | Charging    |
+| ![](/resources/images/batt_080_100.png)  | 80-100%     |
+| ![](/resources/images/batt_060_080.png)  | 60-80%      |
+| ![](/resources/images/batt_040_060.png)  | 40-60%      |
+| ![](/resources/images/batt_020_040.png)  | 20-40%      |
+| ![](/resources/images/batt_000_020.png)  | 0-20%       |
+
+## Configure LGS Watch using your smartphone
+
+| Pebble app on smartphone                | LGS Watch settings                 |
+|:---------------------------------------:|:----------------------------------:|
+| ![Pebble app on smartphone][pebble_app] | ![LGS Watch settings ][lgs_config] |
 
 ## Build Instructions
 
-Clone this repository in an appropriate directory:
+Clone repository:
 
 	git clone https://github.com/fmeus/pebble-lgswatch.git
 
@@ -39,3 +63,7 @@ Configure and build:
 	src/makeall.sh
 
 Compiled version can be found in the folder `releases`
+
+[pebble_app]: /screenshots/pebble_app.png
+[lgs_config]: /screenshots/lgs_config.png
+[lgs_watch]: /screenshots/lgs_watch.png

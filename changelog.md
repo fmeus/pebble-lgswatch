@@ -1,3 +1,9 @@
+v2.2 (Dec 2)
+
+* LGS Watch is now configurable (one version to rule them all) through the Pebble app on your smartphone
+* Added Finnish language
+* Optimized code
+
 v2.1 (Nov 21)
 
 * Added battery and bluetooth status information
