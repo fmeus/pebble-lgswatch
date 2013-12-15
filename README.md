@@ -7,16 +7,18 @@ Features:
 * Day of the week indication
 * Configurable through the Pebble app on your smartphone
 * Display battery and bluetooth status information (configurable, default On)
-* Supporting 9 different languages (configurable, default English)
+* Supporting 11 different languages (configurable, default English)
 	- Croatian
 	- Dutch
 	- English
 	- Finnish
 	- French
 	- German
+	- Greek
 	- Italian
 	- Norwegian
-	- Spanish	
+	- Spanish
+	- Turkish
 * Second date information line (configurable, default Week)
 
 Compiled version of this watchface can be downloaded [here](http://sharedmemorydump.net/pebble-lgs-watchface)  
