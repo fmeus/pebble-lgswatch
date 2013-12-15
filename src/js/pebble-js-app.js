@@ -14,13 +14,14 @@ Pebble.addEventListener( "appmessage", function(e) {
 
 
 Pebble.addEventListener( "showConfiguration", function(e) {
-	Pebble.openURL( "http://fmeus.github.io/www/pebble_lgs/lgs_watch.html?status=" + localStorage.getItem( "status" ) + "&language=" + localStorage.getItem( "language" ) + "&format=" + localStorage.getItem( "format" ) );
+	Pebble.openURL( "http://fmeus.github.io/www/pebble_lgs/lgs_watch-2.3.html" + 
+		            "?status=" + localStorage.getItem( "status" ) + 
+		            "&language=" + localStorage.getItem( "language" ) + 
+		            "&format=" + localStorage.getItem( "format" ) );
 });
 
 
 Pebble.addEventListener( "webviewclosed", function(e) {
- // console.log("Configuration window returned: " + e.response);
- 
 	if ( ( typeof( e.response ) == 'string') && ( e.response.length > 0 ) ) {
 		try {
 			var options = JSON.parse( e.response );

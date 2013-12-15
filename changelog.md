@@ -1,3 +1,9 @@
+v2.3 (Dec 15)
+
+* Optimized code
+* Adjust font size for date/week information to match content
+* Added support for additional langauges: Turkish, Greek
+
 v2.2 (Dec 2)
 
 * LGS Watch is now configurable (one version to rule them all) through the Pebble app on your smartphone

@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <style type="text/css">
+      #spacer { min-height: 8px; }
+    </style>
   </head>
   <body>
     <div data-role="page" id="main">
@@ -22,9 +25,9 @@
             <option value=0>Off</option>
             <option value=1>On</option>
           </select>
-          <div style="font-size: 75%; margin-left: 10px;"><strong>Note</strong>: When this option is turned on your Pebble will vibrate shortly when the Bluetooth connection is lost between your pebble and phone.</div>
+          <div style="font-size: 70%; margin-left: 10px;">When this option is turned on your Pebble will vibrate shortly when the Bluetooth connection is lost between your pebble and phone.</div>
         </div>
-        <div id="spacer">&nbsp;</div>
+        <div id="spacer"></div>
 
         <!-- Language selection -->
         <div>
@@ -36,22 +39,14 @@
             <option value=8  id="FI" class="custom">Finnish</option>
             <option value=3  id="FR" class="custom">French</option>
             <option value=2  id="DE" class="custom">German</option>
+            <option value=10 id="GR" class="custom">Greek</option>
             <option value=6  id="IT" class="custom">Italian</option>
             <option value=7  id="NO" class="custom">Norwegian</option>
             <option value=5  id="ES" class="custom">Spanish</option>
+            <option value=9  id="TR" class="custom">Turkish</option>
           </select>
         </div>
-        <div id="spacer">&nbsp;</div>
-
-        <!-- First day of the week selection -->
-        <div>
-          <label for="firstday"><strong>Week starts on:</strong></label>
-          <select name="firstday" id="firstday">
-            <option value=0 class="custom">Monday</option>
-            <option value=1 class="custom">Sunday</option>
-          </select>
-        </div>
-        <div id="spacer">&nbsp;</div>
+        <div id="spacer"></div>
 
         <!-- Date format -->
         <div>
@@ -63,9 +58,10 @@
             <option value=3 id="mdy" class="custom">MM/DD/YY</option>
             <option value=4 id="wd" class="custom">Wxx Dxxx</option>
           </select>
-          <div style="font-size: 75%; margin-left: 10px;"><strong>Note</strong>: This option determines the information displayed on the bottom line of the watchface.</div>
+          <div style="font-size: 70%; margin-left: 10px;">This option determines the information displayed on the bottom line of the watchface.</div>
         </div>
       </div>
+        <div id="spacer"></div>
 
       <!-- Cancel and Submit buttons -->
       <div class="ui-body ui-body-b">
@@ -79,8 +75,6 @@
     <script>
       $.params = function(param_name){
         var value = new RegExp( '[\\?&]' + param_name + '=([^&#]*)' ).exec( window.location.href );
-
-        if ( value === null ) { return null; }
         return value[1];
       }
 

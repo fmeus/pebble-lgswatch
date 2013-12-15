@@ -4,14 +4,33 @@
   Pebble SDK  : 2.0-BETA2
 */
 
+
 #include <pebble.h>
 #include "lgs_languages.h"
 
 
 // Setting values
-static enum statusKeys { STATUS_OFF = 0, STATUS_ON } current_status;
-static enum formatKeys { FORMAT_WEEK = 0, FORMAT_DOTY, FORMAT_DDMMYY, FORMAT_MMDDYY, FORMAT_WXDX } current_format;
-static enum languageKeys { LANG_EN = 0, LANG_NL, LANG_DE, LANG_FR, LANG_HR, LANG_ES, LANG_IT, LANG_NO, LANG_FI } current_language;
+static enum statusKeys { STATUS_OFF = 0
+                       , STATUS_ON
+                       } current_status;
+static enum formatKeys { FORMAT_WEEK = 0
+                       , FORMAT_DOTY
+                       , FORMAT_DDMMYY
+                       , FORMAT_MMDDYY
+                       , FORMAT_WXDX
+                       } current_format;
+static enum languageKeys { LANG_EN = 0
+                         , LANG_NL
+                         , LANG_DE
+                         , LANG_FR
+                         , LANG_HR
+                         , LANG_ES
+                         , LANG_IT
+                         , LANG_NO
+                         , LANG_FI
+                         , LANG_TR
+                         , LANG_GR
+                         } current_language;
 
 
 // Setting keys
@@ -38,6 +57,7 @@ static TextLayer      *text_week_layer;
 static GFont          *font_time;
 static GFont          *font_days;
 static GFont          *font_date;
+static GFont          *font_date_small;
 static InverterLayer  *currentDayLayer;
 static AppSync        app;
 static uint8_t        sync_buffer[256];
@@ -51,7 +71,6 @@ GRect WEEK_RECT      = ConstantGRect(   0, 132, 144,  25 );
 GRect DAYS_RECT      = ConstantGRect(   0,  76, 144,  13 );
 GRect BATT_RECT      = ConstantGRect( 123,  94,  17,   9 );
 GRect BT_RECT        = ConstantGRect(   4,  94,  17,   9 );
-GRect EMPTY_RECT     = ConstantGRect(   0,   0,   0,   0 );
 GRect OFF_DATE_RECT  = ConstantGRect(   0, 100, 144,  25 );
 GRect OFF_WEEK_RECT  = ConstantGRect(   0, 130, 144,  25 );
 
@@ -63,12 +82,6 @@ static char ampm_text[] = "AM";
 
 // Previous bluetooth connection status
 static bool prev_bt_status = false;
-
-
-#ifdef LANGUAGE_TESTING
-  static int ct = 1;
-  static int speed = 5;
-#endif
 
 
 /*
@@ -99,6 +112,7 @@ void handle_bluetooth( bool connected ) {
     bluetooth_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_NO_BLUETOOTH );
     if ( prev_bt_status != connected ) {
       vibes_short_pulse();
+      light_enable_interaction();
     }
   }
 
@@ -152,6 +166,14 @@ void update_status( void ) {
 
 
 /*
+  Build day line based on user selected first day of the week
+*/
+static void set_day_line( void ) {
+  text_layer_set_text( text_days_layer, day_lines[current_language] );  
+}
+
+
+/*
   Handle update in settings
 */
 static void tuple_changed_callback( const uint32_t key, const Tuple* tuple_new, const Tuple* tuple_old, void* context ) {
@@ -163,8 +185,8 @@ static void tuple_changed_callback( const uint32_t key, const Tuple* tuple_new, 
       current_status = value;
 
       // Reposition status layers
-      layer_set_frame( bitmap_layer_get_layer( battery_layer ), ( current_status == STATUS_ON ) ? BATT_RECT : EMPTY_RECT );
-      layer_set_frame( bitmap_layer_get_layer( bluetooth_layer ), ( current_status == STATUS_ON ) ? BT_RECT : EMPTY_RECT );
+      layer_set_frame( bitmap_layer_get_layer( battery_layer ), ( current_status == STATUS_ON ) ? BATT_RECT : GRectZero );
+      layer_set_frame( bitmap_layer_get_layer( bluetooth_layer ), ( current_status == STATUS_ON ) ? BT_RECT : GRectZero );
 
       // Repasition date and week layers
       layer_set_frame( text_layer_get_layer( text_date_layer ), ( current_status == STATUS_ON ) ? DATE_RECT : OFF_DATE_RECT );
@@ -174,7 +196,13 @@ static void tuple_changed_callback( const uint32_t key, const Tuple* tuple_new, 
     case SETTING_LANGUAGE_KEY:
       persist_write_int( SETTING_LANGUAGE_KEY, value );
       current_language = value;
-      text_layer_set_text( text_days_layer, day_lines[current_language] );
+
+      // Update day line
+      set_day_line();
+
+      // Reset font for date and week layers
+      text_layer_set_font( text_date_layer, font_date );
+      text_layer_set_font( text_week_layer, font_date );
       break;
 
     case SETTING_FORMAT_KEY:
@@ -197,19 +225,18 @@ static void app_error_callback( DictionaryResult dict_error, AppMessageResult ap
 }
 
 
+GRect box_to_rect( GBox box ) {
+  return GRect( box.x, 78, box.w, 11 );
+}
+
+
 /*
   Handle tick events
 */
 void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
   // Update text layer for current day
   int today = tick_time->tm_wday - 1; if ( today < 0 ) { today = 6; }
-  layer_set_frame( inverter_layer_get_layer( currentDayLayer ), highlight_rect[current_language][today] );
-
-  #ifdef LANGUAGE_TESTING
-    layer_set_frame( inverter_layer_get_layer( currentDayLayer ), hightlight_rect[current_language][ct] );
-    if ( tick_time->tm_sec % speed == 0 ) { ct++; }
-    if ( ct == 7 ) { ct = 0; }
-  #endif
+  layer_set_frame( inverter_layer_get_layer( currentDayLayer ), box_to_rect( highlight_box[current_language][today] ) );
 
   strftime( date_text, sizeof( date_text ), date_formats[current_language], tick_time );
   if ( current_language == LANG_EN ) {
@@ -226,6 +253,16 @@ void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
   } else {
     strftime( alt_text, sizeof( alt_text ), alt_formats[current_format], tick_time );
     text_layer_set_text( text_week_layer, alt_text );
+  }
+
+  // Determine size of week and date layers
+  GSize weekSize = text_layer_get_content_size( text_week_layer );
+  GSize dateSize = text_layer_get_content_size( text_date_layer );
+
+  // Switch to a smaller font if content doesn't fit
+  if ( MAX( weekSize.w, dateSize.w ) > 135 ) {
+    text_layer_set_font( text_date_layer, font_date_small );
+    text_layer_set_font( text_week_layer, font_date_small );
   }
 
   // Display hours (i.e. 18 or 06)
@@ -247,17 +284,19 @@ void handle_tick( struct tm *tick_time, TimeUnits units_changed ) {
   }
 }
 
+
 /*
   Force update of time
 */
 void update_time() {
-    // Get current time
+  // Get current time
   time_t now = time( NULL );
   struct tm *tick_time = localtime( &now );
 
   // Force update to avoid a blank screen at startup of the watchface
   handle_tick( tick_time, SECOND_UNIT );
 }
+
 
 /*
   Initialization
@@ -325,6 +364,7 @@ void handle_init( void ) {
   // Load fonts
   font_time = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_SUBSET_40 ) );
   font_days = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_12 ) );
+  font_date_small = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_14 ) );
   font_date = fonts_load_custom_font( resource_get_handle( RESOURCE_ID_FONT_CHICAGO_20 ) );
 
   // Setup time layer
@@ -338,7 +378,6 @@ void handle_init( void ) {
   // Setup days line layer
   text_days_layer = setup_text_layer( DAYS_RECT, GTextAlignmentCenter, font_days );
   layer_add_child( window_layer, text_layer_get_layer( text_days_layer ) );
-  text_layer_set_text( text_days_layer, day_lines[current_language] );
 
   // Setup date layer
   text_date_layer = setup_text_layer( ( current_status == STATUS_ON ) ? DATE_RECT : OFF_DATE_RECT
@@ -353,15 +392,15 @@ void handle_init( void ) {
   layer_add_child( window_layer, text_layer_get_layer( text_week_layer ) );
 
   // Setup battery layer
-  battery_layer = bitmap_layer_create( ( current_status == STATUS_ON ) ? BATT_RECT : EMPTY_RECT );
+  battery_layer = bitmap_layer_create( ( current_status == STATUS_ON ) ? BATT_RECT : GRectZero );
   layer_add_child( window_layer, bitmap_layer_get_layer( battery_layer ) );
 
   // Setup bluetooth layer
-  bluetooth_layer = bitmap_layer_create( ( current_status == STATUS_ON ) ? BT_RECT : EMPTY_RECT );
+  bluetooth_layer = bitmap_layer_create( ( current_status == STATUS_ON ) ? BT_RECT : GRectZero );
   layer_add_child( window_layer, bitmap_layer_get_layer( bluetooth_layer ) );
 
   // Add inverter layer (indicator for the current day of the week)
-  currentDayLayer = inverter_layer_create( EMPTY_RECT );
+  currentDayLayer = inverter_layer_create( GRectZero );
   layer_add_child( window_layer, inverter_layer_get_layer( currentDayLayer ) );
 
   // Subscribe to services
@@ -409,6 +448,7 @@ void handle_deinit( void ) {
   // Destroy font objects
   fonts_unload_custom_font( font_time );
   fonts_unload_custom_font( font_days );
+  fonts_unload_custom_font( font_date_small );
   fonts_unload_custom_font( font_date );
 
   // Clean up AppSync system

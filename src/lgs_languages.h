@@ -6,13 +6,13 @@
 
 #pragma once
 
+// Some handy macros
+#define ConstantGRect(x, y, w, h) {{(x), (y)}, {(w), (h)}}
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+
 
 // Forward declarations
 void update_time();
-
-
-// This works around the inability to use the current GRect macro for constants
-#define ConstantGRect(x, y, w, h) {{(x), (y)}, {(w), (h)}}
 
 
 // Day line information
@@ -25,20 +25,26 @@ static const char *day_lines[] = { "Mo Tu We Th Fr Sa Su"
                                  , "Lu Ma Me Gi Ve Sa Do"
                                  , "Ma Ti On To Fr Lø Sø"
                                  , "Ma Ti Ke To Pe La Su"
+                                 , "Pa Sa Ça Pe Cu Cu Pa"
+                                 , "De Tr Te Pé Pa Sá Ku"
                                  };
 
 
-// GRect for day highlights
-static const GRect highlight_rect[][7] = { { ConstantGRect( 4, 78, 20, 11 ) , ConstantGRect( 26, 78, 16, 11 ) , ConstantGRect( 46, 78, 20, 11 ) , ConstantGRect( 68, 78, 16, 11 ) , ConstantGRect( 88, 78, 14, 11 ) , ConstantGRect( 105, 78, 15, 11 ) , ConstantGRect( 124, 78, 15, 11 ) }
-                                         , { ConstantGRect( 3, 78, 20, 11 ) , ConstantGRect( 27, 78, 12, 11 ) , ConstantGRect( 43, 78, 20, 11 ) , ConstantGRect( 67, 78, 16, 11 ) , ConstantGRect( 87, 78, 15, 11 ) , ConstantGRect( 105, 78, 16, 11 ) , ConstantGRect( 125, 78, 16, 11 ) }
-                                         , { ConstantGRect( 6, 78, 20, 11 ) , ConstantGRect( 30, 78, 12, 11 ) , ConstantGRect( 46, 78, 16, 11 ) , ConstantGRect( 66, 78, 16, 11 ) , ConstantGRect( 86, 78, 14, 11 ) , ConstantGRect( 103, 78, 15, 11 ) , ConstantGRect( 122, 78, 15, 11 ) }
-                                         , { ConstantGRect( 3, 78, 15, 11 ) , ConstantGRect( 22, 78, 20, 11 ) , ConstantGRect( 46, 78, 20, 11 ) , ConstantGRect( 69, 78, 16, 11 ) , ConstantGRect( 89, 78, 16, 11 ) , ConstantGRect( 109, 78, 15, 11 ) , ConstantGRect( 128, 78, 12, 11 ) }
-                                         , { ConstantGRect( 6, 78, 16, 11 ) , ConstantGRect( 26, 78, 14, 11 ) , ConstantGRect( 44, 78, 14, 11 ) , ConstantGRect( 61, 78, 16, 11 ) , ConstantGRect( 81, 78, 16, 11 ) , ConstantGRect( 101, 78, 15, 11 ) , ConstantGRect( 120, 78, 17, 11 ) }
-                                         , { ConstantGRect( 5, 78, 15, 11 ) , ConstantGRect( 24, 78, 20, 11 ) , ConstantGRect( 48, 78, 16, 11 ) , ConstantGRect( 67, 78, 16, 11 ) , ConstantGRect( 87, 78, 12, 11 ) , ConstantGRect( 103, 78, 15, 11 ) , ConstantGRect( 122, 78, 16, 11 ) }
-                                         , { ConstantGRect( 3, 78, 15, 11 ) , ConstantGRect( 22, 78, 20, 11 ) , ConstantGRect( 46, 78, 20, 11 ) , ConstantGRect( 70, 78, 12, 11 ) , ConstantGRect( 86, 78, 16, 11 ) , ConstantGRect( 106, 78, 15, 11 ) , ConstantGRect( 125, 78, 16, 11 ) }
-                                         , { ConstantGRect( 8, 78, 20, 11 ) , ConstantGRect( 30, 78, 12, 11 ) , ConstantGRect( 46, 78, 16, 11 ) , ConstantGRect( 64, 78, 16, 11 ) , ConstantGRect( 84, 78, 14, 11 ) , ConstantGRect( 101, 78, 15, 11 ) , ConstantGRect( 120, 78, 15, 11 ) }
-                                         , { ConstantGRect( 6, 78, 20, 11 ) , ConstantGRect( 28, 78, 12, 11 ) , ConstantGRect( 44, 78, 17, 11 ) , ConstantGRect( 63, 78, 16, 11 ) , ConstantGRect( 83, 78, 16, 11 ) , ConstantGRect( 103, 78, 15, 11 ) , ConstantGRect( 122, 78, 15, 11 ) }
-                                         };
+// GRect for day highlights (fixed y=78, h=11)
+typedef struct GBox { int16_t x; int16_t w; } GBox;
+#define GBox(x, w) {(x), (w)}
+static const GBox highlight_box[][7] = { { GBox( 4, 20 ), GBox( 26, 16 ), GBox( 46, 20 ), GBox( 68, 16 ), GBox( 88, 14 ), GBox( 105, 15 ), GBox( 124, 15 ) }
+                                       , { GBox( 3, 20 ), GBox( 27, 12 ), GBox( 43, 20 ), GBox( 67, 16 ), GBox( 87, 15 ), GBox( 105, 16 ), GBox( 125, 16 ) }
+                                       , { GBox( 6, 20 ), GBox( 30, 12 ), GBox( 46, 16 ), GBox( 66, 16 ), GBox( 86, 14 ), GBox( 103, 15 ), GBox( 122, 15 ) }
+                                       , { GBox( 3, 15 ), GBox( 22, 20 ), GBox( 46, 20 ), GBox( 69, 16 ), GBox( 89, 16 ), GBox( 109, 15 ), GBox( 128, 12 ) }
+                                       , { GBox( 6, 16 ), GBox( 26, 14 ), GBox( 44, 14 ), GBox( 61, 16 ), GBox( 81, 16 ), GBox( 101, 15 ), GBox( 120, 17 ) }
+                                       , { GBox( 5, 15 ), GBox( 24, 20 ), GBox( 48, 16 ), GBox( 67, 16 ), GBox( 87, 12 ), GBox( 103, 15 ), GBox( 122, 16 ) }
+                                       , { GBox( 3, 15 ), GBox( 22, 20 ), GBox( 46, 20 ), GBox( 70, 12 ), GBox( 86, 16 ), GBox( 106, 15 ), GBox( 125, 16 ) }
+                                       , { GBox( 8, 20 ), GBox( 30, 12 ), GBox( 46, 16 ), GBox( 64, 16 ), GBox( 84, 14 ), GBox( 101, 15 ), GBox( 120, 15 ) }
+                                       , { GBox( 6, 20 ), GBox( 28, 12 ), GBox( 44, 17 ), GBox( 63, 16 ), GBox( 83, 16 ), GBox( 103, 15 ), GBox( 122, 15 ) }
+                                       , { GBox( 4, 16 ), GBox( 24, 15 ), GBox( 43, 16 ), GBox( 63, 16 ), GBox( 83, 16 ), GBox( 103, 16 ), GBox( 123, 16 ) }
+                                       , { GBox( 7, 16 ), GBox( 25, 15 ), GBox( 41, 16 ), GBox( 61, 16 ), GBox( 81, 16 ), GBox( 101, 15 ), GBox( 120, 17 ) }
+                                       };
 
 
 // Month names
@@ -51,6 +57,8 @@ static const char *month_names_arr[][12] = { { "Jan", "Feb", "Mar", "Apr", "May"
                                            , { "genn", "febbr", "mar", "apr", "magg", "giugno", "luglio", "ag", "sett", "ott", "nov", "dic" }
                                            , { "Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des" }
                                            , { "tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu" }
+                                           , { "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" }
+                                           , { "Ianuários", "Fevruários", "Mártios", "Aprílios", "Máios", "Iúnios", "Iúlios", "Avghustos", "Septémvrios", "Októvrios", "Noémvrios", "Thekémvrios" }
                                            };
 
 
@@ -64,6 +72,8 @@ static const char *week_formats[] = { "Week %V"
                                     , "%V. Setti."
                                     , "Uke %V"
                                     , "VKO %V"
+                                    , "Hafta %V"
+                                    , "Evdomáda %V"
                                     };
 
 
@@ -77,11 +87,13 @@ static const char *date_formats[] = { "%b %e"
                                     , "%e. "
                                     , "%e. "
                                     , "%e. "
+                                    , "%e "
+                                    , "%e "
                                     };
 
 
 // Formats for second line
-static const char *alt_formats[] = { "Week %V"
+static const char *alt_formats[] = { "<See date_formats[]>"
                                    , "%Y-%j"
                                    , "%d/%m/%y"
                                    , "%m/%d/%y"

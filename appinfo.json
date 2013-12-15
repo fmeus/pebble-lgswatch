@@ -4,7 +4,7 @@
   "longName": "LGS Watch",
   "companyName": "Little Gem Software",
   "versionCode": 2,
-  "versionLabel": "2.2",
+  "versionLabel": "2.3",
   "capabilities": [ "configurable" ],
   "watchapp": {
     "watchface": true
@@ -70,6 +70,11 @@
       {
         "type": "font",
         "name": "FONT_CHICAGO_20",
+        "file": "fonts/CHICAGO.ttf"
+      },
+      {
+        "type": "font",
+        "name": "FONT_CHICAGO_14",
         "file": "fonts/CHICAGO.ttf"
       },
       {
