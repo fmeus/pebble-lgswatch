@@ -2,7 +2,7 @@
 # Project     : LGS Watch watchface
 # Copyright   : Copyright (c) 2011-2013 Little Gem Software. All rights reserved.
 
-VER=2.3
+VER=2.4
 REL=./releases/
 
 # Cleanup
