@@ -1,3 +1,7 @@
+v2.4 (Jan 7)
+
+* Shortend monthnames for Finnish
+
 v2.3 (Dec 15)
 
 * Optimized code

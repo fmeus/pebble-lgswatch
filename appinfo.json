@@ -4,7 +4,7 @@
   "longName": "LGS Watch",
   "companyName": "Little Gem Software",
   "versionCode": 2,
-  "versionLabel": "2.3",
+  "versionLabel": "2.4",
   "capabilities": [ "configurable" ],
   "watchapp": {
     "watchface": true

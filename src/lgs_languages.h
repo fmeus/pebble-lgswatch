@@ -56,7 +56,7 @@ static const char *month_names_arr[][12] = { { "Jan", "Feb", "Mar", "Apr", "May"
                                            , { "enero", "feb", "marzo", "abr", "mayo", "jun", "jul", "agosto", "sept", "oct", "nov", "dic" }
                                            , { "genn", "febbr", "mar", "apr", "magg", "giugno", "luglio", "ag", "sett", "ott", "nov", "dic" }
                                            , { "Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des" }
-                                           , { "tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu" }
+                                           , { "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu" }
                                            , { "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" }
                                            , { "Ianuários", "Fevruários", "Mártios", "Aprílios", "Máios", "Iúnios", "Iúlios", "Avghustos", "Septémvrios", "Októvrios", "Noémvrios", "Thekémvrios" }
                                            };

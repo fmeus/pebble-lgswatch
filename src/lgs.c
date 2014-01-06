@@ -179,10 +179,16 @@ static void set_day_line( void ) {
 static void tuple_changed_callback( const uint32_t key, const Tuple* tuple_new, const Tuple* tuple_old, void* context ) {
   int value = tuple_new->value->uint8;  
 
+  // APP_LOG( APP_LOG_LEVEL_DEBUG, "Update for key = %lu", key );
+
   switch ( key ) {
     case SETTING_STATUS_KEY:
+      // APP_LOG( APP_LOG_LEVEL_DEBUG, "       Setting = Status" );
+
       persist_write_int( SETTING_STATUS_KEY, value );
       current_status = value;
+
+      // APP_LOG( APP_LOG_LEVEL_DEBUG, "        Stored = %lu", persist_read_int( SETTING_STATUS_KEY ) );
 
       // Reposition status layers
       layer_set_frame( bitmap_layer_get_layer( battery_layer ), ( current_status == STATUS_ON ) ? BATT_RECT : GRectZero );
@@ -194,8 +200,12 @@ static void tuple_changed_callback( const uint32_t key, const Tuple* tuple_new, 
       break;
 
     case SETTING_LANGUAGE_KEY:
+      // APP_LOG( APP_LOG_LEVEL_DEBUG, "       Setting = Language" );
+
       persist_write_int( SETTING_LANGUAGE_KEY, value );
       current_language = value;
+
+      // APP_LOG( APP_LOG_LEVEL_DEBUG, "        Stored = %lu", persist_read_int( SETTING_LANGUAGE_KEY ) );
 
       // Update day line
       set_day_line();
@@ -206,8 +216,13 @@ static void tuple_changed_callback( const uint32_t key, const Tuple* tuple_new, 
       break;
 
     case SETTING_FORMAT_KEY:
+      // APP_LOG( APP_LOG_LEVEL_DEBUG, "       Setting = Format" );
+
       persist_write_int( SETTING_FORMAT_KEY, value );
       current_format = value;
+
+      // APP_LOG( APP_LOG_LEVEL_DEBUG, "        Stored = %lu", persist_read_int( SETTING_FORMAT_KEY ) );
+
       break;
   }
 
@@ -327,6 +342,10 @@ void handle_init( void ) {
   current_status = persist_exists( SETTING_STATUS_KEY ) ? persist_read_int( SETTING_STATUS_KEY ) : STATUS_ON;
   current_language = persist_exists( SETTING_LANGUAGE_KEY ) ? persist_read_int( SETTING_LANGUAGE_KEY ) : LANG_EN;
   current_format = persist_exists( SETTING_FORMAT_KEY ) ? persist_read_int( SETTING_FORMAT_KEY ) : FORMAT_WEEK;
+
+  // APP_LOG( APP_LOG_LEVEL_DEBUG, "persist_read_int for Status = %lu", persist_read_int( SETTING_STATUS_KEY ) );
+  // APP_LOG( APP_LOG_LEVEL_DEBUG, "persist_read_int for Langauge = %lu", persist_read_int( SETTING_LANGUAGE_KEY ) );
+  // APP_LOG( APP_LOG_LEVEL_DEBUG, "persist_read_int for Format = %lu", persist_read_int( SETTING_FORMAT_KEY ) );
 
   // Background image
   background_image = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_BACKGROUND );
